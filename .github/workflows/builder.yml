@@ -1,4 +1,4 @@
-name: Delete Artifacts
+name: Build Windows
 on: workflow_dispatch
 
 jobs:
