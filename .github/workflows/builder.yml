@@ -33,3 +33,10 @@ jobs:
         UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
       with:
         targetPlatform: ${{ matrix.targetPlatform }}
+        buildName: "Game"
+        androidAppBundle: true
+    - name: Upload ${{ matrix.targetPlatform }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: Build-${{ matrix.targetPlatform }}
+        path: build/${{ matrix.targetPlatform }}
