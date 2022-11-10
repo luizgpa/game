@@ -2,9 +2,18 @@ name: Build Windows
 on: workflow_dispatch
 
 jobs:
-  build:
-    name: Build my project ✨
+  buildForAllSupportedPlatforms:
+    name: Build for ${{ matrix.targetPlatform }}
     runs-on: self-hosted
+    strategy:
+      fail-fast: true
+      matrix:
+        targetPlatform:
+          - StandaloneOSX
+          - StandaloneWindows64
+          - StandaloneLinux64
+          - Android
+          - iOS
     steps:
       # Checkout
     - name: Checkout repository
@@ -13,9 +22,8 @@ jobs:
     - uses: actions/cache@v2
       with:
         path: Library
-        key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
-        restore-keys: |
-          Library-
+        key: Library-${{ matrix.targetPlatform }}
+        restore-keys: Library-
       # Build
     - name: Build project
       uses: game-ci/unity-builder@v2
@@ -24,4 +32,4 @@ jobs:
         UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
         UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
       with:
-        targetPlatform: StandaloneWindows64
+        targetPlatform: ${{ matrix.targetPlatform }}
